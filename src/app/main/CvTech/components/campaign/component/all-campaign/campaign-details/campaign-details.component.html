@@ -1,0 +1,102 @@
+<div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+      <app-content-header [contentHeader]="contentHeader"></app-content-header>
+  
+      <div class="row" id="basic-table">
+        <div class="col-12">
+  
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title text-primary">Campaign Details</h4>
+            </div>
+            <div class="table-responsive">
+              <ngx-datatable class="bootstrap core-bootstrap ml-1" [columnMode]="'flex'" [headerHeight]="40"
+                [footerHeight]="50" [rowHeight]="58"  rowHeight="auto" [rows]="[Campaign]">
+  
+                <ngx-datatable-column name="Name" prop="full_name" [flexGrow]="1">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    <div>
+                      {{ row?.name }}
+                    </div>
+                  </ng-template>
+                </ngx-datatable-column>
+  
+                <ngx-datatable-column name="Description" prop="full_name" [flexGrow]="2">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    <div>
+                      {{ row?.description }}
+                    </div>
+                  </ng-template>
+                </ngx-datatable-column>
+  
+                <ngx-datatable-column name="Nb Positions" prop="full_name" [flexGrow]="0.5">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    <div class="d-flex justify-content-center">
+                      {{ row?.nbPositions }}
+                    </div>
+                  </ng-template>
+                </ngx-datatable-column>
+  
+                <ngx-datatable-column name="Date" prop="full_name" [flexGrow]="1">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    <div>
+                      {{ row?.closingDate }}
+                    </div>
+                  </ng-template>
+                </ngx-datatable-column>
+  
+              </ngx-datatable>
+            </div>
+          </div>
+  
+          <!-- Details -->
+          <div class="row">
+        
+            <div class="col-md-6 col-xl-4">
+              <div class="card">
+                <core-card [actions]="['collapse']">
+                  <h4 class="card-title text-primary">Region</h4>
+                  <div class="card-body">
+                    <ul class="list-group">
+                      <li class="list-group-item" *ngFor="let region of Campaign?.regions"> <h5> {{region.name}}</h5>
+                        </li>
+                    </ul>
+                  </div>
+                </core-card>
+              </div>
+            </div>
+            <div class="col-md-6 col-xl-4">
+              <div class="card">
+                <core-card [actions]="['collapse']">
+                  <h4 class="card-title text-primary">contract</h4>
+                  <div class="card-body">
+                    <ul class="list-group">
+                      <li class="list-group-item" *ngFor="let contract of Campaign?.contracts"> <h5> {{contract.name}} : </h5>
+                        {{contract.description}}</li>
+                    </ul>
+                  </div>
+                </core-card>
+              </div>
+            </div>
+            <div class="col-md-6 col-xl-4">
+              <div class="card">
+                <core-card [actions]="['collapse']">
+                  <h4 class="card-title text-primary">Functions</h4>
+                  <div class="card-body">
+                    <ul class="list-group">
+                      <li class="list-group-item" *ngFor="let function of Campaign?.functions"> <h5> {{function.name}} : </h5>
+                        {{function.description}}</li>
+                    </ul>
+                  </div>
+                </core-card>
+              </div>
+            </div>
+          
+  
+          </div>
+          <!-- ---------------------------------- -->
+          
+        </div>
+      </div>
+    </div>
+  </div>

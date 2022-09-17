@@ -1,0 +1,177 @@
+<!-- <div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+    <form class="form">
+      <div class="row">
+        <div class="col-md-6 col-12">
+          <div class="form-group">
+            <label for="basicSelect">Request Type</label>
+            <select
+              class="form-control"
+              id="basicSelect"
+              (change)="layoutRT($event)"
+            >
+              <option hidden></option>
+              <option value="Départ">Départ</option>
+              <option value="Congé">Congé</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6 col-12">
+          <label>Employee</label>
+          <div class="form-group">
+            <select
+              class="form-control"
+              id="empSelect"
+              (change)="getBalance($event.target.value)"
+            >
+              <option hidden></option>
+              <option
+                *ngFor="let employee of employees"
+                value="{{ employee.id }}"
+              >
+                {{ employee.firstName }}
+              </option>
+            </select>
+             start of comment --  Basic Select with Search 
+                <ng-select class="ng-select" id="ng-select" [items]="employees" bindLabel="name"
+                    [loading]="selectBasicLoading" rounded>
+                </ng-select>
+                 Basic Select with Search -- end of comment
+          </div>
+        </div>
+
+        start of comment --
+        <div class="col-md-6 col-12">
+                    <div class="form-group">
+                        <label for="requestdate">Request Date</label>
+                        <div class="input-group">
+                            <input class="form-control" id="requestdate" placeholder="yyyy-mm-dd"
+                                name="Basic Date Picker" [(ngModel)]="basicDPdata" ngbDatepicker
+                                #basicDP="ngbDatepicker" (dateSelect)="onDateTimeSelected($event)">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary feather icon-calendar"
+                                    (click)="basicDP.toggle()" type="button" rippleEffect></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                -- end of comment
+
+        <div class="col-md-6 col-12">
+          <div class="form-group">
+            <label for="holydayrange">Holiday Range</label>
+            <div class="input-group">
+              <input
+                name="datepicker"
+                class="form-control"
+                id="holydayrange"
+                ngbDatepicker
+                #rangeSelectionDP="ngbDatepicker"
+                [autoClose]="'outside'"
+                (dateSelect)="onDateSelection($event)"
+                [displayMonths]="2"
+                [dayTemplate]="t"
+                outsideDays="hidden"
+                [startDate]="fromDate!"
+                [value]="formatter.format(today)"
+              />
+              <ng-template #t let-date let-focused="focused">
+                <span
+                  class="custom-day"
+                  [class.focused]="focused"
+                  [class.range]="isRange(date)"
+                  [class.faded]="isHovered(date) || isInside(date)"
+                  (mouseenter)="hoveredDate = date"
+                  (mouseleave)="hoveredDate = null"
+                >
+                  {{ date.day }}
+                </span>
+              </ng-template>
+              <div class="input-group-append">
+                <button
+                  class="btn btn-outline-secondary feather icon-calendar"
+                  (click)="rangeSelectionDP.toggle()"
+                  type="button"
+                  rippleEffect
+                ></button>
+              </div>
+            </div>
+          </div>
+
+          -- start of comment
+          <hr />
+            <pre class="mt-2 p-1">From date model: {{ fromDate | json }}</pre>
+            <pre class="mt-2 p-1">To date model: {{ toDate | json }}</pre>
+            -- end of comment
+
+        </div>
+
+        <div class="col-md-6 col-12">
+          <div class="form-group">
+            <label for="Title">Title</label>
+            <input
+              type="text"
+              id="Title"
+              class="form-control"
+              placeholder="Title"
+              name="title-column"
+              [(ngModel)]="holidayRequest.holidayTitle"
+            />
+          </div>
+        </div>
+        <div class="col-md-6 col-12">
+          <div class="form-group">
+            <label for="basicSelect">Holiday Type</label>
+            <select
+              class="form-control"
+              id="basicSelect"
+              [(ngModel)]="holidayRequest.holidayType"
+              (change)="pop($event.target.value)"
+            >
+              <option hidden></option>
+              <option value="paid" [disabled]="ppdisabled">Paid</option>
+              <option value="unpaid">Unpaid</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-12">
+          <div class="form-group">
+            <label for="Message">Message Details</label>
+            <textarea
+              type="text"
+              id="Message"
+              class="form-control"
+              placeholder="message"
+              name="message-column"
+              rows="3"
+              [(ngModel)]="holidayRequest.messageDetails"
+            ></textarea>
+          </div>
+        </div>
+        <div class="col-md-6 col-12">
+          <label for="Balance">Balance</label>
+          <input
+            type="text"
+            id="Balance"
+            class="form-control"
+            text="0jr"
+            name="balance-column"
+            [(ngModel)]="balance"
+            disabled
+          />
+        </div>
+      </div>
+
+      <div class="col-12">
+        <button rippleEffect class="btn btn-primary mr-1" (click)="saveConge()">
+          Submit
+        </button>
+        <button type="reset" rippleEffect class="btn btn-outline-secondary">
+          Reset
+        </button>
+      </div>
+    </form>
+  </div>
+</div> -->

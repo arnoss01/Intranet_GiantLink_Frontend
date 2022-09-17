@@ -1,0 +1,275 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+    <section id="ngx-datatable-kitchen-sink">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title text-primary">All Teams</h4>
+          <!-- Button trigger modal -->
+        </div>
+        <div class="d-flex flex-row justify-content-between align-items-center">
+          <div class="col-md-5 col-12">
+            <div class="d-flex align-items-center justify-content-start pr-1 pb-1 pl-1 pl-md-0 pb-md-0">
+              <label class="d-flex align-items-center">Search
+                <input type="search" placeholder="Search by Name" class="form-control ml-25"
+                  (keyup)="filterUpdate($event)" (search)="filterUpdate($event)" /></label>
+            </div>
+          </div>
+          <div>
+            <button type="button" (click)="modalOpen(modalVC)" class="btn btn-icon rounded-circle btn-primary mr-1"
+              data-toggle="tooltip" data-placement="top" title="add project" rippleEffect>
+              <span [data-feather]="'plus'"></span>
+            </button>
+            <button type="button" class="btn btn-icon rounded-circle btn-success mr-1" data-toggle="tooltip"
+              data-placement="top" title="export projects" rippleEffect>
+              <span [data-feather]="'upload'"></span>
+            </button>
+            <button type="button" class="btn btn-icon rounded-circle btn-warning mr-1" data-toggle="tooltip"
+              data-placement="top" title="import project" rippleEffect>
+              <span [data-feather]="'download'"></span>
+            </button>
+          </div>
+        </div>
+        <ngx-datatable [rowHeight]="45" class="bootstrap core-bootstrap m-1" [columnMode]="ColumnMode.force"
+          [headerHeight]="40" [footerHeight]="50" [scrollbarH]="true" [limit]="basicSelectedOption" [rows]="projects">
+          <ngx-datatable-column name="Project Name" prop="projectName"
+            headerClass="d-flex align-items-center justify-content-center"
+            cellClass="d-flex align-items-center justify-content-center">
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Project Type" prop="projectType"
+            headerClass="d-flex align-items-center justify-content-center"
+            cellClass="d-flex align-items-center justify-content-center">
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Status" prop="status"
+            headerClass="d-flex align-items-center justify-content-center"
+            cellClass="d-flex align-items-center justify-content-center">
+            <ng-template let-status="value" ngx-datatable-cell-template>
+              <div class="badge badge-pill" [ngClass]="{
+                  'badge-light-success': status == '1',
+                  'badge-light-danger': status == '0'
+                }">
+                {{
+                status == "1"
+                ? "Activé"
+                : status == "0"
+                ? "Desactivé"
+                : "Not Known"
+                }}
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Start Date" prop="startDate"
+            headerClass="d-flex align-items-center justify-content-center"
+            cellClass="d-flex align-items-center justify-content-center">
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Finish Date" prop="finishDate"
+            headerClass="d-flex align-items-center justify-content-center"
+            cellClass="d-flex align-items-center justify-content-center">
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Actions" [sortable]="false"
+            headerClass="d-flex align-items-center justify-content-center"
+            cellClass="d-flex align-items-center justify-content-center">
+            <ng-template ngx-datatable-cell-template let-row="row">
+              <div class="d-flex align-items-center justify-content-center">
+                <a href="javascript:void(0)" class="d-flex align-items-center m-1"
+                  (click)="modalEdit(modalPrimaryedit, row.id)" data-toggle="tooltip" data-placement="top"
+                  title="edit project">
+                  <i data-feather="edit" class="text-primary cursor-pointer"></i></a>
+                <!--<a href="javascript:void(0)" class="d-flex align-items-center"
+                                    (click)="modalOpenDanger(modalDanger, row?.id)" data-toggle="tooltip"
+                                    data-placement="top" title="delete project"><i data-feather="trash-2"
+                                        class="text-primary cursor-pointer"></i></a>-->
+
+                <div class="custom-control custom-switch custom-switch-success">
+                  <input type="checkbox" class="custom-control-input" id="{{ row.id }}" [checked]="row.status"
+                    (change)="modalOpenDanger(row?.id, !row.status)" (click)="changeProjectStatus()" />
+                  <label class="custom-control-label" for="{{ row.id }}">
+                    <span class="switch-icon-left"><i data-feather="check"></i></span>
+                    <span class="switch-icon-right"><i data-feather="x"></i></span>
+                  </label>
+                </div>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+        <div class="card-footer">
+          <div class="col-md-3 col-12">
+            <div class="d-flex flex-row justify-content-between align-items-center">
+              <label class="d-flex align-items-center">Show
+                <select class="form-control mx-25" [(ngModel)]="basicSelectedOption" (change)="getAllProjects()">
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                </select>
+                entries</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!------------------change status modal -------------------->
+    <div class="modal-danger d-inline-block">
+      <ng-template #modalDanger let-modal>
+        <div class="modal-header">
+          <h5 class="modal-title" id="myModalLabel160">Confirm</h5>
+
+          <button type="button" class="close" (click)="modal.dismiss('Change click')" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" tabindex="0" ngbAutofocus>
+          Are you sure you want to change this Project status ?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" (click)="modal.close('Accept click')" rippleEffect>
+            Cancel
+          </button>
+
+          <button type="submit" class="btn btn-danger" (click)="changeProjectStatus()" rippleEffect>
+            Change
+          </button>
+        </div>
+      </ng-template>
+    </div>
+
+    <!------------------------------------------------>
+
+    <!--Modal Edit Project-->
+    <ng-template #modalPrimaryedit let-modal>
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel160">Edit Project</h5>
+        <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" tabindex="0" ngbAutofocus>
+        <form [formGroup]="formEdit" (ngSubmit)="updateProject()" class="login-form">
+          <div class="row d-flex justify-content-center">
+            <div class="col-md-5 col-12">
+              <div class="form-group">
+                <label for="basicSelect">Project Name</label>
+                <input type="text" id="prj-name" formControlName="name" class="form-control" placeholder="Project Name"
+                  formControlName="projectName" />
+              </div>
+            </div>
+            <div class="col-md-5 col-12">
+              <div class="form-group">
+                <label for="Title">Project type</label>
+                <select class="form-control" id="empSelect" formControlName="projectType">
+                  <option hidden></option>
+                  <option value="type 1">type 1</option>
+                  <option value="type 2">type 2</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-5 col-12">
+              <div class="form-group">
+                <label for="editdesc"> Start Date </label>
+                <div class="input-group">
+                  <input class="form-control" placeholder="yyyy-mm-dd" formControlName="startDate" ngbDatepicker
+                    #basicDP="ngbDatepicker" (dateSelect)="onDateTimeSelected($event)" />
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary feather icon-calendar" (click)="basicDP.toggle()"
+                      type="button" rippleEffect></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-5 col-12">
+              <div class="form-group">
+                <label for="editdesc">finish Date</label>
+                <div class="input-group">
+                  <input class="form-control" placeholder="yyyy-mm-dd" formControlName="finishDate" ngbDatepicker
+                    #basicDPf="ngbDatepicker" (dateSelect)="onDateTimeSelected($event)" />
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary feather icon-calendar" (click)="basicDPf.toggle()"
+                      type="button" rippleEffect></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button rippleEffect class="btn btn-primary mr-1">Submit</button>
+            <button type="reset" rippleEffect class="btn btn-outline-secondary">
+              Reset
+            </button>
+          </div>
+        </form>
+      </div>
+    </ng-template>
+
+    <!--Modal Add Project-->
+    <ng-template #modalVC let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel1">Add Project</h4>
+        <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form class="form" [formGroup]="form" (ngSubmit)="createProject()">
+        <div class="row d-flex justify-content-center">
+          <div class="col-md-5 col-12">
+            <div class="form-group">
+              <label for="projectName">Project Name</label>
+              <input type="text" id="prj-name" formControlName="name" class="form-control" name="projectName"
+                placeholder="Project Name" formControlName="projectName" />
+            </div>
+          </div>
+          <div class="col-md-5 col-12">
+            <div class="form-group">
+              <label for="Title">Project type</label>
+              <select class="form-control" id="empSelect" formControlName="projectType">
+                <option hidden></option>
+                <option value="type 1">type 1</option>
+                <option value="type 2">type 2</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-md-5 col-12">
+            <div class="form-group">
+              <label for="editdesc"> Start Date </label>
+              <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd" formControlName="startDate" ngbDatepicker
+                  #basicDP="ngbDatepicker" (dateSelect)="onDateTimeSelected($event)" />
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary feather icon-calendar" (click)="basicDP.toggle()"
+                    type="button" rippleEffect></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-5 col-12">
+            <div class="form-group">
+              <label for="editdesc">finish Date</label>
+              <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd" formControlName="finishDate" ngbDatepicker
+                  #basicDPf="ngbDatepicker" (dateSelect)="onDateTimeSelected($event)" />
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary feather icon-calendar" (click)="basicDPf.toggle()"
+                    type="button" rippleEffect></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button rippleEffect class="btn btn-primary mr-1">Submit</button>
+            <button type="reset" rippleEffect class="btn btn-outline-secondary">
+              Reset
+            </button>
+          </div>
+        </div>
+      </form>
+    </ng-template>
+  </div>
+</div>

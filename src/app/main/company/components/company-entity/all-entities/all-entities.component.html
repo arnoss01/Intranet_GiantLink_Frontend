@@ -1,0 +1,313 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+    <div class="row" id="basic-table">
+      <div class="col-12">
+        <div class="row" id="basic-table">
+          <div class="col-12">
+            <div class="card">
+      
+              <div class="card-header">
+                <h4 class="card-title text-primary">All entities</h4>
+              </div>
+
+              <div class="row">
+                <div class="col-12 mb-2">
+
+                  <button class="btn btn-primary ml-1" rippleEffect
+                      (click)="modalAdd(modalPrimaryAdd)">
+                      <i data-feather="plus" class="mr-0 mr-sm-1"></i>
+                      <span class="d-none d-sm-inline-block">Add New entity</span>
+                  </button>   
+
+                  <label class="d-flex align-items-center float-right mr-1">
+                      Search
+                      <input type="search" [(ngModel)]="name" name="name" id="name" 
+                        placeholder="Search by Name" class="form-control ml-25"
+                        (keyup)="getAllentities()" />
+                  </label>
+                </div>
+              </div>
+              
+              <ngx-datatable class="bootstrap core-bootstrap ml-1" 
+                [columnMode]="'flex'" 
+                [headerHeight]="40"
+                [footerHeight]="50" 
+                [rowHeight]="58"
+                [limit]="10" 
+                rowHeight="auto" 
+                [rows]="entities"
+                [selected]="chkBoxSelected"
+              >
+
+                <ngx-datatable-column name="Name" [flexGrow]="1.25">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{row?.name}}
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Date" [flexGrow]="1">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{row?.timestamp | date:'yyyy-MM-dd HH:mm' }}
+                  </ng-template>
+                </ngx-datatable-column>
+                
+                <ngx-datatable-column name="Actions" [flexGrow]="0.75" >
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    <div class="d-flex align-items-center">
+                      <div ngbDropdown container="body">
+                        <a
+                          ngbDropdownToggle
+                          href="javascript:void(0);"
+                          class="hide-arrow"
+                          id="dropdownBrowserState"
+                          data-toggle="dropdown"
+                          aria-haspopup="true"
+                          aria-expanded="false"
+                        >
+                        <i data-feather="more-horizontal" class="text-primary cursor-pointer mr-50"></i>
+                        </a>
+                        <div ngbDropdownMenu class="dropdown-menu-right" 
+                            aria-labelledby="dropdownBrowserState">
+
+                          <a routerLink="companyentity-details/{{row.id}}"
+                              ngbDropdownItem class="d-flex align-items-center">
+                               <i data-feather="file-text" class="mr-50"></i> 
+                                 Details
+                          </a>
+
+                          <a ngbDropdownItem href="javascript:void(0);" 
+                                (click)="modalEdit(modalPrimaryedit,row.id)">
+                              <i data-feather="edit-2" class="mr-50"></i>
+                              <span>Edit</span>
+                          </a>
+
+                          <a href="javascript:void(0)" 
+                              ngbDropdownItem class="d-flex align-items-center" 
+                              (click)="modalOpenDanger(modalDanger, row?.id)">
+                            <i data-feather="trash-2" class="mr-50"></i>
+                                 Delete
+                          </a>
+
+                        </div>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ngx-datatable-column>
+              </ngx-datatable>
+
+              <ngx-datatable-footer>
+                <ng-template 
+                  ngx-datatable-footer-template
+                  let-rowCount="rowCount"
+                  let-pageSize="pageSize"
+                  let-selectedCount="selectedCount"
+                  let-curPage="curPage"
+                  let-offset="offset"
+                  let-isVisible="isVisible">
+                    <div class="page-count">
+                      <span *ngIf="selectedMessage">
+                        {{selectedCount.toLocaleString()}} {{selectedMessage}} / 
+                      </span>
+                        {{rowCount.toLocaleString()}} {{totalMessage}}
+                    </div>
+                </ng-template>
+              </ngx-datatable-footer>
+
+              <div class="col-lg-12">
+                <ngb-pagination
+                  class="d-flex justify-content-end"
+                  [directionLinks]="false"
+                  [collectionSize]="totalPages"
+                  [(page)]="pagePosition"
+                  (pageChange)="pageChanged($event)"
+                >
+                  <ng-template ngbPaginationPrevious>
+                    <span [data-feather]="'chevron-left'" [class]="'font-weight-bolder'">
+                    </span>Prev
+                  </ng-template>
+
+                  <ng-template ngbPaginationNext>Next
+                    <span [data-feather]="'chevron-right'" [class]="'font-weight-bolder'">
+                    </span>
+                  </ng-template>
+
+                </ngb-pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!------------------ Edit Entity ------------------->
+
+  <ng-template #modalPrimaryedit let-modal>
+    <form [formGroup]="form" (ngSubmit)="updateEntity()" class="login-form">
+    <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel160"> Edit entity </h5>  
+        <button type="button" class="close"
+            (click)="modal.dismiss('Cross click')" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+
+        <div class="col-12">
+            <div class="form-group row">
+                <div class="col-sm-3 col-form-label">
+                    <label for="entityname"> Name of entity </label>
+                </div>
+                <div class="col-sm-9">
+
+                  <div class="form-group">
+                    <input
+                    type="text"
+                    formControlName="entityname"
+                    id="entityname"
+                    class="form-control"
+                    name="entityname"
+                    [ngClass]="{
+                      'is-invalid': formControl['entityname'].errors
+                    }"
+                    placeholder="Enter the entity's name"
+                  />
+                  <div *ngIf="formControl['entityname'].errors">
+                      <div *ngIf="formControl['entityname'].errors['required']">
+                        The entity's name is required
+                      </div>
+                      <div *ngIf="formControl['entityname'].errors['minlength']">
+                        <span class="err">The entity's name should be more than 3 character!</span>
+                      </div>
+                  </div>
+              </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+          <div class="form-group row">
+              <div class="col-sm-3 col-form-label">
+                  <label for="editcompany"> Company </label>
+              </div>
+              <br>
+              <div class="col-sm-9">
+               <!-- <input type="text" id="editcompany" class="form-control"
+                  name="editcompany"
+                  [(ngModel)]="options.name" 
+                />-->
+                <select class="form-control" (change)="onChange($event)">
+                  <option *ngFor="let company of companies" id="ent"
+                      value="{{company.id}}">{{company.name}}
+                  </option>
+                </select>
+              </div>
+          </div>
+        </div>   
+    </div>
+
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary" rippleEffect>
+          Accept
+      </button>
+    </div>
+  </form>
+</ng-template>
+
+<!------------------ Add Entity ------------------->
+
+<ng-template #modalPrimaryAdd let-modal>
+  <form [formGroup]="form" (ngSubmit)="AddEntity()" class="login-form">
+  <div class="modal-header">
+      <h5 class="modal-title" id="myModalLabel160"> Add entity </h5>
+
+      <button type="button" class="close"
+          (click)="modal.dismiss('Cross click')" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  <div class="modal-body" tabindex="0" ngbAutofocus>
+    
+      <div class="col-12">
+          <div class="form-group row">
+              <div class="col-sm-3 col-form-label">
+                  <label for="entityName"> Name of entity </label>
+              </div>
+              <div class="col-sm-9">
+
+                <div class="form-group">
+                  <input type="text" id="entityname" class="form-control" name="entityname" formControlName="entityname"
+                    placeholder="entityname" [ngClass]="{ 'is-invalid': submitted && formControl['entityname'].errors }" />
+                  <div *ngIf="formControl['entityname'].touched && formControl['entityname'].invalid">
+                    <div *ngIf="formControl['entityname'].errors && formControl['entityname'].errors['required']">
+                      <span class="err"> entityname is required ! </span>
+                    </div>
+                    <div *ngIf="formControl['entityname'].errors['minlength']">
+                      <span class="err">entityname should be more than 3 character!</span>
+                    </div>
+                  </div>
+                </div>
+
+                  <!--<input type="text" id="entityname" class="form-control"
+                      name="entityname"  [(ngModel)]="entity.name"/>-->
+              </div>
+          </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group row">
+            <div class="col-sm-3 col-form-label">
+                <label for="company"> Company </label>
+            </div>
+            <br>
+            <div class="col-sm-9">
+                <select class="form-control" (change)="onChange($event)">
+                    <option *ngFor="let company of companies" id="company"
+                        value="{{company.id}}">{{company.name}}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div> 
+
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary" rippleEffect>
+      Accept
+    </button>
+  </div>
+</form>
+</ng-template>
+
+<!-----------   Modal Danger   ----------->
+
+<div class="modal-danger d-inline-block">
+  <ng-template #modalDanger let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title" id="myModalLabel160">Confirm</h5>
+
+      <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+      Are you sure you want to delete the entity ?
+    </div>
+    <div class="modal-footer">
+
+      <button type="button" class="btn btn-danger" (click)="modal.close('Accept click')" rippleEffect>
+        Cancel
+      </button>
+
+      <button type="button" class="btn btn-danger" (click)="deleteEntity()" rippleEffect>
+        Delete
+      </button>
+
+    </div>
+  </ng-template>
+</div>
+<swal></swal>

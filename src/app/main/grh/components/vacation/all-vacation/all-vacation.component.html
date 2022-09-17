@@ -1,0 +1,356 @@
+<!-- <div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+
+        <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+        <section id="ngx-datatable-kitchen-sink">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title text-primary">All Teams</h4>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-50">
+                        <a class="btn btn-outline-danger float-right mr-1" rippleEffect
+                            (click)="modalmultipledelete(modalDangerMultiple)" [hidden]="isDisabled">
+                            Delete selected elements
+                        </a>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="d-flex justify-content-between align-items-center m-1">
+                            <label class="d-flex align-items-center">Show
+                                <select class="form-control mx-25" [(ngModel)]="basicSelectedOption"
+                                    (change)="getAllholidays()">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                </select>
+                                entries</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12 d-flex justify-content-md-end">
+                        <div class="d-flex align-items-center justify-content-end pr-1 pb-1 pl-1 pl-md-0 pb-md-0">
+                            <label class="d-flex align-items-center">Search<input type="search"
+                                    placeholder="Search by Name" class="form-control ml-25"
+                                    (keyup)="filterUpdate($event)" (search)="filterUpdate($event)" /></label>
+                        </div>
+                    </div>
+                </div>
+                <ngx-datatable [rowHeight]="45" class="bootstrap core-bootstrap" [columnMode]="ColumnMode.force"
+                    [headerHeight]="40" [footerHeight]="50" [scrollbarH]="false"
+                    [selectionType]="SelectionType.checkbox" [limit]="basicSelectedOption" (select)="onSelect($event)"
+                    [rows]="holidays">
+
+                    <ngx-datatable-column [width]="40" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+                        [resizeable]="false" cellClass="d-flex align-items-center">
+                        <ng-template ngx-datatable-header-template let-value="value"
+                            let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" [checked]="allRowsSelected"
+                                    (change)="selectFn(!allRowsSelected)" id="headerChkbxRef" [vertical-align]="middle"
+                                    cellClass="d-flex align-items-center" />
+                                <label class="custom-control-label" for="headerChkbxRef"></label>
+                            </div>
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                            let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" [checked]="isSelected"
+                                    (change)="onCheckboxChangeFn($event)" id="rowChkbxRef{{ rowIndex }}" />
+                                <label class="custom-control-label" for="rowChkbxRef{{ rowIndex }}"></label>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Title" prop="holidayTitle" cellClass="d-flex align-items-center">
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Message Details" prop="messageDetails" 
+                        headerClass="d-flex align-items-center" cellClass="d-flex align-items-center">
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Holiday Type" prop="holidayType"
+                        headerClass="d-flex align-items-center justify-content-center"
+                        cellClass="d-flex align-items-center justify-content-center">
+                        <ng-template let-holidayType="value" ngx-datatable-cell-template>
+                            <div class="badge badge-pill" [ngClass]="{
+                              'badge-light-success': holidayType == 'paid',
+                              'badge-light-danger': holidayType == 'unpaid'
+                            }">
+                                {{
+                                holidayType == 'paid'
+                                ? 'paid'
+                                : holidayType == 'unpaid'
+                                ? 'unpaid'
+                                : 'Applied'
+                                }}
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+
+                    <ngx-datatable-column name="Start Date" prop="startDate"
+                        headerClass="d-flex align-items-center justify-content-center"
+                        cellClass="d-flex align-items-center justify-content-center">
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Finish Date" prop="finishDate"
+                        headerClass="d-flex align-items-center justify-content-center"
+                        cellClass="d-flex align-items-center justify-content-center">
+                    </ngx-datatable-column>
+            ------------<ngx-datatable-column name="Balance" prop="Balance" cellClass="d-flex align-items-center">
+                    </ngx-datatable-column> --------------------
+
+                    <ngx-datatable-column name="Actions" [sortable]="false"
+                        headerClass="d-flex align-items-center justify-content-center"
+                        cellClass="d-flex align-items-center justify-content-center">
+                        <ng-template ngx-datatable-cell-template let-row="row">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <div ngbDropdown container="body">
+                                    <a ngbDropdownToggle href="javascript:void(0);" class="hide-arrow"
+                                        id="dropdownBrowserState" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                        <i data-feather="more-vertical" class="text-primary cursor-pointer mr-50"></i>
+                                    </a>
+                                    <div ngbDropdownMenu class="dropdown-menu-right"
+                                        aria-labelledby="dropdownBrowserState">
+                                        <a href="javascript:void(0)" ngbDropdownItem class="d-flex align-items-center"
+                                            (click)="modalEdit(modalPrimaryedit,row.id)"><i data-feather="archive"
+                                                class="mr-50"></i> Edit</a>
+                                        <a href="javascript:void(0)" ngbDropdownItem class="d-flex align-items-center"
+                                            (click)="modalOpenDanger(modalDanger, row?.id)"><i data-feather="trash-2"
+                                                class="mr-50"></i> Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+
+            </div>
+        </section>
+
+    </div>
+</div> -->
+
+<!-----------   Modal Edit Team   ----------->
+
+<!-- <ng-template #modalPrimaryedit let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="myModalLabel160">Edit Holiday</h5>
+    <button
+      type="button"
+      class="close"
+      (click)="modal.dismiss('Cross click')"
+      aria-label="Close"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" tabindex="0" ngbAutofocus>
+    <form [formGroup]="form" (ngSubmit)="updateHoliday()" class="login-form">
+      <div class="col-12">
+        <div class="form-group row">
+          <div class="col-sm-3 col-form-label">
+            <label for="editname"> Title of holiday </label>
+          </div>
+
+          <div class="col-sm-9">
+            <div class="form-group">
+              <input
+                type="text"
+                id="holidayTitle"
+                class="form-control"
+                formControlName="holidayTitle"
+                placeholder="Enter the holiday title"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group row">
+          <div class="col-sm-3 col-form-label">
+            <label for="editdesc"> message Details </label>
+          </div>
+          <div class="col-sm-9">
+            <div class="form-group">
+              <input
+                type="text"
+                id="message-Details"
+                class="form-control"
+                placeholder="Enter Message Details"
+                formControlName="messageDetails"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group row">
+          <div class="col-sm-3 col-form-label">
+            <label for="editdesc">holiday Type</label>
+          </div>
+          <div class="col-sm-9">
+            <div class="form-group">
+              <select
+                class="form-control"
+                id="holidayType"
+                formControlName="holidayType"
+                (change)="pop($event.target.value)"
+              >
+                <option hidden></option>
+                <option value="paid" [disabled]="ppdisabled">Paid</option>
+                <option value="unpaid">Unpaid</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group row">
+          <div class="col-sm-3 col-form-label">
+            <label for="editdesc"> Start Date </label>
+          </div>
+          <div class="col-sm-9">
+            <div class="input-group">
+              <input
+                class="form-control"
+                placeholder="yyyy-mm-dd"
+                formControlName="startDate"
+                ngbDatepicker
+                #basicDP="ngbDatepicker"
+                (dateSelect)="onDateTimeSelected($event)"
+              />
+              <div class="input-group-append">
+                <button
+                  class="btn btn-outline-secondary feather icon-calendar"
+                  (click)="basicDP.toggle()"
+                  type="button"
+                  rippleEffect
+                ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group row">
+          <div class="col-sm-3 col-form-label">
+            <label for="editdesc">finish Date</label>
+          </div>
+          <div class="col-sm-9">
+            <div class="input-group">
+              <input
+                class="form-control"
+                placeholder="dd-mm-yyyy"
+                formControlName="finishDate"
+                ngbDatepicker
+                #basicDPf="ngbDatepicker"
+                (dateSelect)="onDateTimeSelected($event)"
+              />
+              <div class="input-group-append">
+                <button
+                  class="btn btn-outline-secondary feather icon-calendar"
+                  (click)="basicDPf.toggle()"
+                  type="button"
+                  rippleEffect
+                ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" rippleEffect>
+          Accept
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template> -->
+
+<!-----------   Modal Danger   ----------->
+
+<!-- <div class="modal-danger d-inline-block">
+  <ng-template #modalDanger let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title" id="myModalLabel160">Confirm</h5>
+
+      <button
+        type="button"
+        class="close"
+        (click)="modal.dismiss('Cross click')"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+      Are you sure you want to delete the Team ?
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-danger"
+        (click)="modal.close('Accept click')"
+        rippleEffect
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-danger"
+        (click)="deleteHoliday()"
+        rippleEffect
+      >
+        Delete
+      </button>
+    </div>
+  </ng-template>
+</div> -->
+
+<!-----------   Modal Danger for multiple delete  ----------->
+
+<!-- <div class="modal-danger d-inline-block">
+  <ng-template #modalDangerMultiple let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title" id="myModalLabel160">Confirm</h5>
+
+      <button
+        type="button"
+        class="close"
+        (click)="modal.dismiss('Cross click')"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+      Are you sure you want to delete the selected Teams ?
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-danger"
+        (click)="modal.close('Accept click')"
+        rippleEffect
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-danger"
+        (click)="deletemultiple()"
+        rippleEffect
+      >
+        Delete
+      </button>
+    </div>
+  </ng-template>
+</div> -->

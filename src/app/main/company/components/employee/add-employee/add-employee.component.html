@@ -1,0 +1,186 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+    <div class="row ">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title text-primary"> Add Employee </h4>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form form-horizontal">
+              <div class="row">
+
+                <div class="col-6">
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="firstName"> First Name </label>
+                    </div>
+                    <div class="col-sm-9">
+                      <div class="form-group">
+                        <input type="firstName" id="firstName" class="form-control" name="firstName" 
+                        formControlName="firstName" placeholder="firstName" 
+                        [ngClass]="{ 'is-invalid': submitted && formControl['firstName'].errors }" />
+                        <div *ngIf="formControl['firstName'].errors" class="required-feedback">
+                          <div *ngIf="formControl['firstName'].errors['required']" 
+                          class="required-feedback"> firstName is required </div>
+                          <div *ngIf="formControl['firstName'].errors['pattern']">
+                            firstName must have characters only
+                          </div>
+                          <div *ngIf="formControl['firstName'].errors['minlength']">Add more characters</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group row">
+                      <div class="col-sm-3 col-form-label">
+                        <label for="lastName"> Lst Name </label>
+                      </div>
+                      <div class="col-sm-9">
+                        <div class="form-group">
+                          <input type="lastName" id="lastName" class="form-control" name="lastName" 
+                          formControlName="lastName" placeholder="lastName" 
+                          [ngClass]="{ 'is-invalid': submitted && formControl['lastName'].errors }" />
+                          <div *ngIf="formControl['lastName'].errors" class="required-feedback">
+                            <div *ngIf="formControl['lastName'].errors['required']" 
+                            class="required-feedback"> lastName is required </div>
+                            <div *ngIf="formControl['lastName'].errors['pattern']">
+                                lastName must have characters only
+                            </div>
+                            <div *ngIf="formControl['lastName'].errors['minlength']">Add more characters</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                <div class="col-6">
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="email">Email</label>
+                    </div>
+                    <div class="col-sm-9">
+                      <input type="email" id="email" class="form-control" name="email" placeholder="email"
+                        formControlName="email"
+                        [ngClass]="{ 'is-invalid': submitted && formControl['email'].errors }" />
+                      <div *ngIf="formControl['email'].errors" class="required-feedback">
+                        <div *ngIf="formControl['email'].errors['required']">Email is required</div>
+                        <div *ngIf="formControl['email'].errors['email']">Email is invalid</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-6">
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="phoneNumber">Phone number</label>
+                    </div>
+                    <div class="col-sm-9">
+                      <input type="text" id="phoneNumber" class="form-control" name="phoneNumber" 
+                      placeholder="phone number" formControlName="phoneNumber"
+                        [ngClass]="{ 'is-invalid': submitted && formControl['phoneNumber'].errors }" />
+                      <div *ngIf="formControl['phoneNumber'].errors" class="required-feedback">
+                        <div *ngIf="formControl['phoneNumber'].errors['required']">
+                            Phone Number is required</div>
+                        <div *ngIf="formControl['phoneNumber'].errors['pattern']">
+                          Phone Number must start with eg: +2126 or 02126 or 06
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-6">
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="hireDate">hire Date</label>
+                    </div>
+                    <div class="col-sm-9">
+                      <input type="text" id="hireDate" class="form-control" name="hireDate" 
+                      placeholder="hireDate" formControlName="hireDate"
+                        [ngClass]="{ 'is-invalid': submitted && formControl['hireDate'].errors }" />
+                      <div *ngIf="formControl['hireDate'].errors" class="required-feedback">
+                        <div *ngIf="formControl['hireDate'].errors['required']">
+                          hireDate is required</div>
+                        <div *ngIf="formControl['hireDate'].errors['pattern']">
+                          hireDate must start with eg: +2126 or 02126 or 06
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-6">
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="teamName"> Choose team </label>
+                    </div>
+
+                    <div class="col-sm-9">
+                      <div class="form-group">
+                        <ng-select [items]="teams" [addTag]="selectAddTagMethod" [hideSelected]="true" multiple="true"
+                        bindLabel="teamName" [(ngModel)]="educationSelected" name="teamName">
+                        <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                          <span class="ng-value-label"> {{ item.teamName }}</span>
+                          <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                        </ng-template>
+                      </ng-select>
+                      </div>
+                    </div>
+
+
+
+                   
+                  </div>
+                </div>
+               <!-- <div class="col-6">
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="hireDate">hire Date</label>
+                    </div>
+                    <div class="col-sm-9">
+                      <input type="date" id="hireDate" class="form-control" formControlName="hireDate"
+                        name="hireDate" />
+                      <div *ngIf="submitted && formControl['hireDate'].errors" class="invalid-feedback">
+                        <div *ngIf="formControl['hireDate'].errors['required']">hireDate is required</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>-->
+
+                <!--div class="col-6">
+                    <div class="form-group row">
+                      <div class="col-sm-3 col-form-label">
+                        <label for="hireDate"> HireDate </label>
+                      </div>
+                      <div class="col-sm-9">
+                        <input type="date" id="hireDate" class="form-control" formControlName="hireDate"
+                          name="hireDate" />
+                        <div *ngIf="submitted && formControl['hireDate'].errors" class="invalid-feedback">
+                          <div *ngIf="formControl['hireDate'].errors['required']"> hireDate is required </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>-->
+
+                <div class="col-sm-12">
+                  <div class="d-flex justify-content-end mb-2">
+                    <button type="reset" rippleEffect class="mr-1 btn btn-outline-secondary">Reset</button>
+        
+                    <button type="submit" class="btn btn-primary"
+                      rippleEffect>Save</button>
+                      <swal></swal>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

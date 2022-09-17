@@ -1,0 +1,148 @@
+<div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+      <app-content-header [contentHeader]="contentHeader"></app-content-header>
+      <section id="basic-carousel">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title text-primary">Add Experience</h4>
+              </div>
+  
+              <div class="card-body">
+                <form class="form form-horizontal" [formGroup]="exprienceForm" (ngSubmit)="addData()">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="form-group row">
+                        <div class="col-sm-3 col-form-label">
+                          <label for="first-name">Name</label>
+                        </div>
+                        <div class="col-sm-9">
+                          <input type="text" formControlName="name" id="first-name" class="form-control" name="fname"
+                            placeholder="Name" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="form-group row">
+                        <div class="col-sm-3 col-form-label">
+                          <label for="email-id">Description</label>
+                        </div>
+                        <div class="col-sm-9">
+                          <textarea id="campaign-desc" formControlName="description" placeholder="Description"
+                            name="c-desc" rows="2" wrap="soft" class="form-control" data-v-aa799a9e=""></textarea>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-9 offset-sm-3">
+                      <button type="submit" rippleEffect class="btn btn-primary mr-1">Add</button>
+                      <button type="reset" rippleEffect class="btn btn-outline-secondary">Reset</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+  
+  
+        </div>
+      </section>
+  
+    </div>
+  </div>
+  
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+  
+      <div class="row" id="table-hover-animation">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title text-primary">All Experiences</h4>
+              <div class="d-flex align-items-center justify-content-end pr-1 pb-1 pl-1 pl-md-0 pb-md-0">
+                <input type="search" name="name" id="name" [(ngModel)]="name" placeholder="Search by Name"
+                  class="form-control ml-25" (change)="getAllData()" />
+                <!-- <input type="search" placeholder="Search By Name" class="form-control ml-25" /> -->
+              </div>
+            </div>
+  
+  
+            <!-- Data table -->
+  
+            <ngx-datatable class="bootstrap core-bootstrap ml-1" [columnMode]="'flex'" [headerHeight]="40"
+              [footerHeight]="50" [rowHeight]="58" rowHeight="auto" [rows]="data">
+  
+              <ngx-datatable-column name="Full Name" [flexGrow]="1">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row?.name}}
+                </ng-template>
+              </ngx-datatable-column>
+  
+              <ngx-datatable-column name="Description" [flexGrow]="1">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{row?.description}}
+                </ng-template>
+              </ngx-datatable-column>
+  
+              <ngx-datatable-column name="Actions" [flexGrow]="0.75">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  <div class="d-flex align-items-center">
+                    <div ngbDropdown container="body">
+                      <a ngbDropdownToggle href="javascript:void(0);" class="hide-arrow" id="dropdownBrowserState"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i data-feather="more-horizontal" class="text-primary cursor-pointer mr-50"></i>
+                      </a>
+                      <div ngbDropdownMenu class="drodopwn-menu-right" aria-labelledby="dropdownBrowserState">
+                        <a routerLink="candidat-details/{{row.id}}" ngbDropdownItem class="d-flex align-items-center"><i
+                            data-feather="file-text" class="mr-50"></i> Details
+                        </a>
+                        <a href="javascript:void(0)" ngbDropdownItem class="d-flex align-items-center"
+                          (click)="modalOpenDanger(modalDanger, row?.id)">
+                          <i data-feather="trash-2" class="mr-50"></i> Delete
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngx-datatable-column>
+            </ngx-datatable>
+            <div class=" col-lg-12">
+              <h5 class="text-right mb-1"></h5>
+              <ngb-pagination class="d-flex justify-content-end" [directionLinks]="false" [collectionSize]="totalPages"
+                [(page)]="pagePosition" (pageChange)="pageChanged($event)">
+              </ngb-pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- --------- Delete --------- -->
+  <div class="modal-danger d-inline-block">
+    <!-- Modal -->
+    <ng-template #modalDanger let-modal>
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel160">Confirm</h5>
+  
+        <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" tabindex="0" ngbAutofocus>
+        Are you sure you want to delete the education ?
+      </div>
+      <div class="modal-footer">
+  
+        <button type="button" class="btn btn-danger" (click)="modal.close('Accept click')" rippleEffect>
+          Cancel
+        </button>
+  
+        <button type="button" class="btn btn-danger" (click)="deleteData()" routerLink="/reload" rippleEffect>
+          Delete
+        </button>
+  
+      </div>
+    </ng-template>
+    <!-- / Modal -->
+  </div>

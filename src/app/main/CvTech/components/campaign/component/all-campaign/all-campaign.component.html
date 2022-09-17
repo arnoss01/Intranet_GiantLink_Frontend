@@ -1,0 +1,164 @@
+<div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+      <app-content-header [contentHeader]="contentHeader"></app-content-header>
+      <div class="row" id="basic-table">
+        <div class="col-12">
+          <!-- ---------------------------------- -->
+          <div class="row" id="basic-table">
+            <div class="col-12">
+              <div class="card">
+  
+  
+                <div class="card-header">
+                  <h4 class="card-title text-primary">All Campaigns</h4>
+                </div>
+  
+                <div class="row">
+                  <div class="col-12  mb-2">
+                    <button class="btn btn-primary ml-1" routerLink="/cvtech/campaign/addcampaign" rippleEffect>
+                      <i data-feather="plus" class="mr-0 mr-sm-1"></i>
+                      <span class="d-none d-sm-inline-block">Add New Campaign</span>
+                    </button>
+                    <label class="d-flex align-items-center float-right mr-1">
+                      Search
+                      <input type="search" [(ngModel)]="name" name="name" id="name" placeholder="Search by Name"
+                        class="form-control ml-25" (change)="getAllCampaigns()" />
+                    </label>
+                  </div>
+                </div>
+                <div class="col-md-6 col-12">
+                  <div class="d-flex justify-content-between align-items-center m-1">
+                    <label class="d-flex align-items-center"
+                      >Show
+                      <select class="form-control mx-25" (change)="getAllCampaigns()" [(ngModel)]="sizeSelect">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                      </select>
+                      entries</label
+                    >
+                  </div>
+                </div>
+                <ngx-datatable class="bootstrap core-bootstrap ml-1" [columnMode]="'flex'" [headerHeight]="40"
+                  [footerHeight]="50" [rowHeight]="58" rowHeight="auto" [rows]="Campains"
+                  [selected]="chkBoxSelected">
+  
+                  <ngx-datatable-column name="Name" [flexGrow]="1">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      {{row?.name}}
+                    </ng-template>
+                  </ngx-datatable-column>
+  
+                  <ngx-datatable-column name="Description" [flexGrow]="1.5">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      {{row?.description}}
+                    </ng-template>
+                  </ngx-datatable-column>
+  
+                  <ngx-datatable-column name="Nb Positions" [flexGrow]="1">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      <div class="d-flex justify-content-center">
+                        {{row?.nbPositions}}
+                      </div>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Date" prop="full_name" [flexGrow]="1">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      <div>
+                        {{ row?.closingDate }}
+                      </div>
+                    </ng-template>
+                  </ngx-datatable-column>
+  
+                  <ngx-datatable-column name="Actions" [flexGrow]="0.5">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                    
+                        <div class="d-flex align-items-center justify-content-center">
+                          <a routerLink="campaign-details/{{row.id}}" class="d-flex align-items-center m-1"
+                             data-toggle="tooltip" data-placement="top"
+                            title="details">
+                            <i data-feather="file-text" class="text-primary cursor-pointer"></i></a>
+                          <a href="javascript:void(0)" class="d-flex align-items-center"
+                            (click)="modalOpenDanger(modalDanger, row.id)" data-toggle="tooltip" data-placement="top"
+                            title="delete project"><i data-feather="trash-2" class="text-primary cursor-pointer"></i></a>
+                        </div>
+               
+  <!--
+                      <div class="d-flex align-items-center">
+                        <div ngbDropdown container="body">
+                          <a ngbDropdownToggle href="javascript:void(0);" class="hide-arrow" id="dropdownBrowserState"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i data-feather="more-horizontal" class="text-primary cursor-pointer mr-50"></i>
+                          </a>
+                          <div ngbDropdownMenu class="drodopwn-menu-right" aria-labelledby="dropdownBrowserState">
+                            <a routerLink="campaign-details/{{row.id}}" ngbDropdownItem
+                              class="d-flex align-items-center"><i data-feather="file-text" class="mr-50"></i> Details
+                            </a>
+                            <a href="javascript:void(0)" ngbDropdownItem class="d-flex align-items-center"
+                              (click)="modalOpenDanger(modalDanger, row?.id)">
+                              <i data-feather="trash-2" class="mr-50"></i> Delete
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+  -->
+                    </ng-template>
+                  </ngx-datatable-column>
+                </ngx-datatable>
+  
+                <ngx-datatable-footer>
+                  <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                    let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
+                    <div class="page-count">
+                      <span *ngIf="selectedMessage">
+                        {{selectedCount.toLocaleString()}} {{selectedMessage}} /
+                      </span>
+                      {{rowCount.toLocaleString()}} {{totalMessage}}
+                    </div>
+                  </ng-template>
+                </ngx-datatable-footer>
+  
+                <div class="col-lg-12">
+                  <ngb-pagination class="d-flex justify-content-end" [collectionSize]="totalPages" [(page)]="page"
+                  [boundaryLinks]="true" size="lg" [maxSize]="2" (pageChange)="pageChanged($event)">
+                </ngb-pagination>
+                </div>
+  
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal-danger d-inline-block">
+    <!-- Modal -->
+    <ng-template #modalDanger let-modal>
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel160">Confirm</h5>
+  
+        <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" tabindex="0" ngbAutofocus>
+        Are you sure you want to delete the compaign ?
+      </div>
+      <div class="modal-footer">
+  
+        <button type="button" class="btn btn-danger" (click)="modal.close('Accept click')" rippleEffect>
+          Cancel
+        </button>
+  
+        <button type="button" class="btn btn-danger" (click)="deleteCampaign()" routerLink="/reload" rippleEffect>
+          Delete
+        </button>
+  
+      </div>
+    </ng-template>
+    <!-- / Modal -->
+  </div>
+  
+  

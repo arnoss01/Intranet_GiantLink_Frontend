@@ -1,0 +1,119 @@
+<div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+        <app-content-header [contentHeader]="contentHeader"></app-content-header>
+        <div class="row" id="basic-table">
+            <div class="col-12">
+                <div class="row" id="basic-table-2">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title text-primary">All Employees</h4>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 mb-2">
+
+                                    <label class="d-flex align-items-center float-right mr-1">
+                                        Search
+                                        <input #key="ngModel"
+                                               (ngModelChange)="searchEmployees(key.value)"
+                                               aria-label="Search"
+                                               class="form-control me-2"
+                                               name="key"
+                                               ngModel placeholder="Search by Employee First Name"
+                                               type="search">
+                                    </label>
+                                </div>
+                            </div>
+
+                            <ngx-datatable
+                                    class="bootstrap core-bootstrap ml-1"
+                                    [columnMode]="'flex'"
+                                    [headerHeight]="40"
+                                    [footerHeight]="50"
+                                    [rowHeight]="58"
+                                    [limit]="pageSize"
+                                    rowHeight="auto"
+                                    [rows]="employees"
+                                    [selected]="chkBoxSelected"
+                            >
+
+                                <ngx-datatable-column name="FirstName" [flexGrow]="1.25">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        {{ row?.firstName }}
+                                    </ng-template>
+                                    Name
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-column name="LastName" [flexGrow]="1.25">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        {{ row?.lastName }}
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-column name="Email" [flexGrow]="1.25">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        {{ row?.email }}
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-column name="Phone" [flexGrow]="1.25">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        {{ row?.phoneNumber }}
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-column name="Holiday Balance" [flexGrow]="1.25">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        {{ row?.holidayBalance.balance }}
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-column name="Employee Details" [flexGrow]="1.25">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        <a routerLink="/grh/employee/employee-details/{{row.id}}"
+                                           class="btn btn-primary btn-sm">Details</a>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                            </ngx-datatable>
+
+                            <ngx-datatable-footer>
+
+
+                            </ngx-datatable-footer>
+
+                            <div class="col-lg-12">
+                                <ngb-pagination
+                                        class="d-flex justify-content-end"
+                                        [collectionSize]="totalEmployees"
+                                        [(page)]="page"
+                                        (pageChange)="pageChanged($event)"
+                                        [pageSize]="pageSize"
+                                >
+                                    <ng-template ngbPaginationPrevious>
+                    <span
+                            [data-feather]="'chevron-left'"
+                            [class]="'font-weight-bolder'"
+                    >
+                    </span
+                    >Prev
+                                    </ng-template>
+
+                                    <ng-template ngbPaginationNext
+                                    >Next
+                                        <span
+                                                [data-feather]="'chevron-right'"
+                                                [class]="'font-weight-bolder'"
+                                        >
+                    </span>
+                                    </ng-template>
+                                </ngb-pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

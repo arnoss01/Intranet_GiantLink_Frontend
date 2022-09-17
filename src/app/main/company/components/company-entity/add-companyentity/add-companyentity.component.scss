@@ -1,0 +1,14 @@
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+div[contenteditable] {
+    border: 1px solid #ccc!important;
+    min-height: 30px;
+    line-height: 20px;
+    max-height: 200px;
+    overflow: auto;
+    border-radius: 5px;
+}

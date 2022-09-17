@@ -1,0 +1,134 @@
+<div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+        <app-content-header [contentHeader]="contentHeader"></app-content-header>
+        <div class="col-md-6 col-lg-4">
+            <div class="card">
+                <img class="card-img-top" src="assets/images/slider/04.jpg" alt="Card image cap"/>
+                <div class="card-body">
+                    <h4 class="card-title">Forum 1</h4>
+                    <p class="card-text">
+                    </p>
+                </div>
+            </div>
+        </div>
+        <button
+                class="btn btn-primary ml-1"
+                rippleEffect
+                (click)="modalAdd(modalPrimaryAdd)"
+        >
+            <i data-feather="plus" class="mr-0 mr-sm-1"></i>
+            <span class="d-none d-sm-inline-block">Add New forum</span>
+        </button>
+    </div>
+</div>
+        <!--<a href="javascript:void(0)" rippleEffect class="btn btn-outline-primary">Add Forum</a>-->
+        <ng-template #modalPrimaryAdd let-modal>
+            <form [formGroup]="form" (ngSubmit)="AddForum()" class="login-form">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel160">Add forum</h5>
+
+                    <button
+                            type="button"
+                            class="close"
+                            (click)="modal.dismiss('Cross click')"
+                            aria-label="Close"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" tabindex="0" ngbAutofocus>
+                    <div class="col-12">
+                        <div class="form-group row">
+                            <div class="col-sm-3 col-form-label">
+                                <label for="name"> Name  </label>
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="form-group">
+                                    <input
+                                            type="text"
+                                            id="name"
+                                            class="form-control"
+                                            name="name"
+                                            formControlName="name"
+                                            placeholder="name"
+                                            [ngClass]="{
+                  'is-invalid': submitted && formControl['name'].errors
+                }"
+                                    />
+                                    <div
+                                            *ngIf="
+                  formControl['name'].touched && formControl['name'].invalid
+                "
+                                    >
+                                        <div
+                                                *ngIf="
+                    formControl['name'].errors &&
+                    formControl['name'].errors['required']
+                  "
+                                        >
+                                            <span class="err"> name is required ! </span>
+                                        </div>
+                                        <div *ngIf="formControl['name'].errors['minlength']">
+                                            <span class="err">name should be more than 3 character!</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group row">
+                            <div class="col-sm-3 col-form-label">
+                                <label for="description"> Description </label>
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="form-group">
+                                    <input
+                                            type="text"
+                                            id="description"
+                                            class="form-control"
+                                            name="description"
+                                            formControlName="description"
+                                            placeholder="description"
+                                            [ngClass]="{
+                  'is-invalid': submitted && formControl['description'].errors
+                }"
+                                    />
+                                    <div
+                                            *ngIf="
+                  formControl['description'].touched &&
+                  formControl['description'].invalid
+                "
+                                    >
+                                        <div
+                                                *ngIf="
+                    formControl['description'].errors &&
+                    formControl['description'].errors['required']
+                  "
+                                        >
+                                            <span class="err"> name is required ! </span>
+                                        </div>
+                                        <div *ngIf="formControl['description'].errors['minlength']">
+                  <span class="err">
+                    Description should be more than 2 character and less than
+                    150 characters!
+                  </span>
+                                        </div>
+                                        <div *ngIf="formControl['description'].errors['maxlength']">
+                  <span class="err">
+                    Description should be more than 2 character and less than
+                    150 characters!
+                  </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" rippleEffect>Accept</button>
+                </div>
+            </form>
+        </ng-template>
+

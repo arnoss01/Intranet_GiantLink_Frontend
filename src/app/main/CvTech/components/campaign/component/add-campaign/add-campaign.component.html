@@ -1,0 +1,180 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+    <form class="form form-horizontal" [formGroup]="campForm" (ngSubmit)="onSubmit()">
+      <div class="card">
+        <div class="row ">
+
+          <div class="col-md-6">
+            <div class="card-header">
+              <h4 class="card-title text-primary">Campaign details</h4>
+            </div>
+            <div class="card-body">
+              <!-- <div class="row"> -->
+              <div class="col-12">
+                <div class="form-group row">
+                  <div class="col-sm-3 col-form-label">
+                    <label for="first-name">Campaign name</label>
+                  </div>
+                  <div class="col-sm-9">
+                    <input type="text" formControlName="name" id="campaign-name" class="form-control" name="name"
+                      placeholder="Campaign name" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group row">
+                  <div class="col-sm-3 col-form-label">
+                    <label for="email-id">Number of Positions </label>
+                  </div>
+                  <div class="col-sm-9">
+                    <input type="number"formControlName="nbPositions" id="positions-nb" class="form-control"
+                      name="nbPositions" placeholder="Number of positions" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group row">
+                  <div class="col-sm-3 col-form-label">
+                    <label for="contact-info">Description</label>
+                  </div>
+                  <div class="col-sm-9">
+                    <textarea id="campaign-desc" formControlName="description" placeholder="Description"
+                      name="description" rows="5" wrap="soft" class="form-control" data-v-aa799a9e=""></textarea>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- </div> -->
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card">
+             <br><br>
+              <div class="card-body">
+               <div cl ass="col-12">
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="password">Closing Date</label>
+                    </div>
+                    <div class="col-sm-9">
+                      <input type="date" id="closing-date" formControlName="closingDate" class="form-control"
+                        name="closing_date" placeholder="Closing Date" />
+                    </div>
+                  </div>
+                </div>
+
+
+
+                <div cl ass="col-12">
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="password">Regions</label>
+                    </div>
+                    <div class="col-sm-9">
+                  <ng-select formControlName="regionsIds"
+                    [multiple]="true"
+                    [closeOnSelect]="false"
+                    placeholder="Select regions">
+                    <ng-option *ngFor="let region of regions" [value]="region.id">{{region.name}}</ng-option>
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+      
+
+                
+
+               
+                <!-- <div class="row"> 
+                <div class="col-12">
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="contact-info">Education</label>
+                    </div>
+                    <div class="col-sm-9">
+                      <ng-select [items]="education" [addTag]="selectAddTagMethod" [hideSelected]="true" multiple="true"
+                        bindLabel="name" [(ngModel)]="educationSelected" name="name">
+                        <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                          <span class="ng-value-label"> {{ item.name }}</span>
+                          <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="contact-info">Exprience</label>
+                    </div>
+                    <div class="col-sm-9">
+                      <ng-select [items]="experience" [addTag]="selectAddTagMethod" [hideSelected]="true"
+                        multiple="true" bindLabel="name" [(ngModel)]="experienceSelected" name="name">
+                        <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                          <span class="ng-value-label"> {{ item.name }}</span>
+                          <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="contact-info">Function</label>
+                    </div>
+                    <div class="col-sm-9">
+                      <ng-select [items]="function" [addTag]="selectAddTagMethod" [hideSelected]="true" multiple="true"
+                        bindLabel="name" [(ngModel)]="functionSelected" name="name">
+                        <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                          <span class="ng-value-label"> {{ item.name }}</span>
+                          <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-form-label">
+                      <label for="contact-info">Skills</label>
+                    </div>
+                    <div class="col-sm-9">
+                      <ng-select [items]="skill" [addTag]="selectAddTagMethod" [hideSelected]="true" multiple="true"
+                        bindLabel="name" [(ngModel)]="skillSelected" name="name">
+                        <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                          <span class="ng-value-label"> {{ item.name }}</span>
+                          <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                  </div>
+                </div>
+                <!-- </div> -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-sm-12">
+          <div class="d-flex justify-content-end mb-2">
+            <button type="reset" rippleEffect class="mr-1 btn btn-outline-secondary">Reset</button>
+
+            <button type="submit" (click)="addCompaign()" class="btn btn-primary" rippleEffect>Save</button>
+            <!-- Swal of Sweet Alert With Position center -->
+            <!--/ Swal of Sweet Alert With Position center -->
+          </div>
+        </div>
+
+      </div>
+    </form>
+
+  </div>
+</div>

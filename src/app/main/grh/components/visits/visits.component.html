@@ -1,0 +1,680 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+    <div class="row" id="basic-table">
+      <div class="col-12">
+        <div class="row" id="basic-table">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title text-primary">All visits</h4>
+              </div>
+
+              <div class="row">
+                <div class="col-12 mb-2">
+                  <button
+                    class="btn btn-primary ml-1"
+                    rippleEffect
+                    (click)="modalAdd(modalPrimaryAdd)"
+                  >
+                    <i data-feather="plus" class="mr-0 mr-sm-1"></i>
+                    <span class="d-none d-sm-inline-block">Add New visit</span>
+                  </button>
+
+                  <label class="d-flex align-items-center float-right mr-1">
+                    Search
+                    <input
+                      type="search"
+                      [(ngModel)]="search"
+                      name="firstName"
+                      id="firstName"
+                      placeholder="Search by employee's first name"
+                      class="form-control ml-25"
+                      (keyup)="getAllvisits()"
+                    />
+                  </label>
+                </div>
+              </div>
+
+              <ngx-datatable
+                class="bootstrap core-bootstrap ml-1"
+                [columnMode]="'flex'"
+                [headerHeight]="40"
+                [footerHeight]="50"
+                [rowHeight]="58"
+                [limit]="10"
+                rowHeight="auto"
+                [rows]="visits"
+                [selected]="chkBoxSelected"
+              >
+                <ngx-datatable-column name="Date" [flexGrow]="1">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.datetime | date: "dd-MM-yyyy --- HH:mm" }}
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Name" [flexGrow]="1.25">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.name }}
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Cin" [flexGrow]="1.25">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.cin }}
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="VisitPurpose" [flexGrow]="1.25">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.visitPurpose }}
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Observation" [flexGrow]="1.25">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.observation }}
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Actions" [flexGrow]="0.75">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    <div class="d-flex align-items-center">
+                      <div ngbDropdown container="body">
+                        <a
+                          ngbDropdownToggle
+                          href="javascript:void(0);"
+                          class="hide-arrow"
+                          id="dropdownBrowserState"
+                          data-toggle="dropdown"
+                          aria-haspopup="true"
+                          aria-expanded="false"
+                        >
+                          <i
+                            data-feather="more-horizontal"
+                            class="text-primary cursor-pointer mr-50"
+                          ></i>
+                        </a>
+                        <div
+                          ngbDropdownMenu
+                          class="dropdown-menu-right"
+                          aria-labelledby="dropdownBrowserState"
+                        >
+                          <a
+                            ngbDropdownItem
+                            href="javascript:void(0);"
+                            (click)="modalEdit(modalPrimaryedit, row.id)"
+                          >
+                            <i data-feather="edit-2" class="mr-50"></i>
+                            <span>Edit</span>
+                          </a>
+
+                          <a
+                            href="javascript:void(0)"
+                            ngbDropdownItem
+                            class="d-flex align-items-center"
+                            (click)="modalOpenDanger(modalDanger, row?.id)"
+                          >
+                            <i data-feather="trash-2" class="mr-50"></i>
+                            Delete
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ngx-datatable-column>
+              </ngx-datatable>
+
+              <ngx-datatable-footer>
+                <ng-template
+                  ngx-datatable-footer-template
+                  let-rowCount="rowCount"
+                  let-pageSize="pageSize"
+                  let-selectedCount="selectedCount"
+                  let-curPage="curPage"
+                  let-offset="offset"
+                  let-isVisible="isVisible"
+                >
+                  <div class="page-count">
+                    <span *ngIf="selectedMessage">
+                      {{ selectedCount.toLocaleString() }}
+                      {{ selectedMessage }} /
+                    </span>
+                    {{ rowCount.toLocaleString() }} {{ totalMessage }}
+                  </div>
+                </ng-template>
+              </ngx-datatable-footer>
+
+              <div class="col-lg-12">
+                <ngb-pagination
+                  class="d-flex justify-content-end"
+                  [directionLinks]="false"
+                  [collectionSize]="totalPages"
+                  [(page)]="pagePosition"
+                  (pageChange)="pageChanged($event)"
+                >
+                  <ng-template ngbPaginationPrevious>
+                    <span
+                      [data-feather]="'chevron-left'"
+                      [class]="'font-weight-bolder'"
+                    >
+                    </span
+                    >Prev
+                  </ng-template>
+
+                  <ng-template ngbPaginationNext
+                    >Next
+                    <span
+                      [data-feather]="'chevron-right'"
+                      [class]="'font-weight-bolder'"
+                    >
+                    </span>
+                  </ng-template>
+                </ngb-pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!------------------ Add Visit ------------------->
+
+<ng-template #modalPrimaryAdd let-modal>
+  <form [formGroup]="form" (ngSubmit)="AddVisit()" class="login-form">
+    <div class="modal-header">
+      <h5 class="modal-title" id="myModalLabel160">Add visit</h5>
+
+      <button
+        type="button"
+        class="close"
+        (click)="modal.dismiss('Cross click')"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+      <div class="col-12">
+        <div class="form-group row">
+          <div class="col-sm-3 col-form-label">
+            <label for="name"> Name of the visitor </label>
+          </div>
+          <div class="col-sm-9">
+            <div class="form-group">
+              <input
+                type="text"
+                id="name"
+                class="form-control"
+                name="name"
+                formControlName="name"
+                placeholder="name"
+                [ngClass]="{
+                  'is-invalid': submitted && formControl['name'].errors
+                }"
+              />
+              <div
+                *ngIf="
+                  formControl['name'].touched && formControl['name'].invalid
+                "
+              >
+                <div
+                  *ngIf="
+                    formControl['name'].errors &&
+                    formControl['name'].errors['required']
+                  "
+                >
+                  <span class="err"> name is required ! </span>
+                </div>
+                <div *ngIf="formControl['name'].errors['minlength']">
+                  <span class="err">name should be more than 3 character!</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group row">
+          <div class="col-sm-3 col-form-label">
+            <label for="cin"> CIN of the visitor </label>
+          </div>
+          <div class="col-sm-9">
+            <div class="form-group">
+              <input
+                type="text"
+                id="cin"
+                class="form-control"
+                name="cin"
+                formControlName="cin"
+                placeholder="cin"
+                [ngClass]="{
+                  'is-invalid': submitted && formControl['cin'].errors
+                }"
+              />
+              <div
+                *ngIf="formControl['cin'].touched && formControl['cin'].invalid"
+              >
+                <div
+                  *ngIf="
+                    formControl['cin'].errors &&
+                    formControl['cin'].errors['required']
+                  "
+                >
+                  <span class="err"> cin is required ! </span>
+                </div>
+                <div *ngIf="formControl['cin'].errors['minlength']">
+                  <span class="err"
+                    >CIN should have no more than 8 character nor less!</span
+                  >
+                </div>
+                <div *ngIf="formControl['cin'].errors['maxlength']">
+                  <span class="err"
+                    >CIN should have no more than 8 character nor less!!</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group row">
+          <div class="col-sm-3 col-form-label">
+            <label for="visitPurpose"> Visit purpose </label>
+          </div>
+          <div class="col-sm-9">
+            <div class="form-group">
+              <input
+                type="text"
+                id="visitPurpose"
+                class="form-control"
+                name="visitPurpose"
+                formControlName="visitPurpose"
+                placeholder="visitPurpose"
+                [ngClass]="{
+                  'is-invalid': submitted && formControl['visitPurpose'].errors
+                }"
+              />
+              <div
+                *ngIf="
+                  formControl['visitPurpose'].touched &&
+                  formControl['visitPurpose'].invalid
+                "
+              >
+                <div
+                  *ngIf="
+                    formControl['visitPurpose'].errors &&
+                    formControl['visitPurpose'].errors['required']
+                  "
+                >
+                  <span class="err"> name is required ! </span>
+                </div>
+                <div *ngIf="formControl['visitPurpose'].errors['minlength']">
+                  <span class="err"
+                    >visitPurpose should be more than 5 character and less than
+                    150 characters!
+                  </span>
+                </div>
+                <div *ngIf="formControl['visitPurpose'].errors['maxlength']">
+                  <span class="err"
+                    >visitPurpose should be more than 5 character and less than
+                    150 characters!
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group row">
+          <div class="col-sm-3 col-form-label">
+            <label for="observation"> Observation </label>
+          </div>
+          <div class="col-sm-9">
+            <div class="form-group">
+              <input
+                type="text"
+                id="observation"
+                class="form-control"
+                name="observation"
+                formControlName="observation"
+                placeholder="observation"
+                [ngClass]="{
+                  'is-invalid': submitted && formControl['observation'].errors
+                }"
+              />
+              <div
+                *ngIf="
+                  formControl['observation'].touched &&
+                  formControl['observation'].invalid
+                "
+              >
+                <div
+                  *ngIf="
+                    formControl['observation'].errors &&
+                    formControl['observation'].errors['required']
+                  "
+                >
+                  <span class="err"> name is required ! </span>
+                </div>
+                <div *ngIf="formControl['observation'].errors['minlength']">
+                  <span class="err">
+                    Observation should be more than 2 character and less than
+                    150 characters!
+                  </span>
+                </div>
+                <div *ngIf="formControl['observation'].errors['maxlength']">
+                  <span class="err">
+                    Observation should be more than 2 character and less than
+                    150 characters!
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group row">
+          <div class="col-sm-3 col-form-label">
+            <label for="company"> Employee </label>
+          </div>
+          <br />
+          <div class="col-sm-9">
+            <select class="form-control" (change)="onChange($event)">
+              <option
+                *ngFor="let employee of employees"
+                id="employee"
+                value="{{ employee.id }}"
+              >
+                {{ employee.firstName }} {{ employee.lastName }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary" rippleEffect>Accept</button>
+    </div>
+  </form>
+</ng-template>
+
+<!------------------ Edit Visit ------------------->
+
+<ng-template #modalPrimaryedit let-modal>
+  <form [formGroup]="form" (ngSubmit)="updateVisit()" class="login-form">
+    <div class="modal-header">
+      <h5 class="modal-title" id="myModalLabel160">Edit visit</h5>
+      <button
+        type="button"
+        class="close"
+        (click)="modal.dismiss('Cross click')"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+      <div class="col-12">
+        <div class="form-group row">
+          <div class="col-sm-3 col-form-label">
+            <label for="name"> Name of the visitor </label>
+          </div>
+          <div class="col-sm-9">
+            <div class="form-group">
+              <input
+                type="text"
+                id="name"
+                class="form-control"
+                name="name"
+                formControlName="name"
+                placeholder="name"
+                [ngClass]="{
+                  'is-invalid': submitted && formControl['name'].errors
+                }"
+              />
+              <div
+                *ngIf="
+                  formControl['name'].touched && formControl['name'].invalid
+                "
+              >
+                <div
+                  *ngIf="
+                    formControl['name'].errors &&
+                    formControl['name'].errors['required']
+                  "
+                >
+                  <span class="err"> name is required ! </span>
+                </div>
+                <div *ngIf="formControl['name'].errors['minlength']">
+                  <span class="err">name should be more than 3 character!</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group row">
+          <div class="col-sm-3 col-form-label">
+            <label for="cin"> CIN of the visitor </label>
+          </div>
+          <div class="col-sm-9">
+            <div class="form-group">
+              <input
+                type="text"
+                id="cin"
+                class="form-control"
+                name="cin"
+                formControlName="cin"
+                placeholder="cin"
+                [ngClass]="{
+                  'is-invalid': submitted && formControl['cin'].errors
+                }"
+              />
+              <div
+                *ngIf="formControl['cin'].touched && formControl['cin'].invalid"
+              >
+                <div
+                  *ngIf="
+                    formControl['cin'].errors &&
+                    formControl['cin'].errors['required']
+                  "
+                >
+                  <span class="err"> cin is required ! </span>
+                </div>
+                <div *ngIf="formControl['cin'].errors['minlength']">
+                  <span class="err"
+                    >CIN should have no more than 8 character nor less!</span
+                  >
+                </div>
+                <div *ngIf="formControl['cin'].errors['maxlength']">
+                  <span class="err"
+                    >CIN should have no more than 8 character nor less!!</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group row">
+          <div class="col-sm-3 col-form-label">
+            <label for="visitPurpose"> Visit purpose </label>
+          </div>
+          <div class="col-sm-9">
+            <div class="form-group">
+              <input
+                type="text"
+                id="visitPurpose"
+                class="form-control"
+                name="visitPurpose"
+                formControlName="visitPurpose"
+                placeholder="visitPurpose"
+                [ngClass]="{
+                  'is-invalid': submitted && formControl['visitPurpose'].errors
+                }"
+              />
+              <div
+                *ngIf="
+                  formControl['visitPurpose'].touched &&
+                  formControl['visitPurpose'].invalid
+                "
+              >
+                <div
+                  *ngIf="
+                    formControl['visitPurpose'].errors &&
+                    formControl['visitPurpose'].errors['required']
+                  "
+                >
+                  <span class="err"> name is required ! </span>
+                </div>
+                <div *ngIf="formControl['visitPurpose'].errors['minlength']">
+                  <span class="err"
+                    >visitPurpose should be more than 5 character and less than
+                    150 characters!
+                  </span>
+                </div>
+                <div *ngIf="formControl['visitPurpose'].errors['maxlength']">
+                  <span class="err"
+                    >visitPurpose should be more than 5 character and less than
+                    150 characters!
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group row">
+          <div class="col-sm-3 col-form-label">
+            <label for="observation"> Observation </label>
+          </div>
+          <div class="col-sm-9">
+            <div class="form-group">
+              <input
+                type="text"
+                id="observation"
+                class="form-control"
+                name="observation"
+                formControlName="observation"
+                placeholder="observation"
+                [ngClass]="{
+                  'is-invalid': submitted && formControl['observation'].errors
+                }"
+              />
+              <div
+                *ngIf="
+                  formControl['observation'].touched &&
+                  formControl['observation'].invalid
+                "
+              >
+                <div
+                  *ngIf="
+                    formControl['observation'].errors &&
+                    formControl['observation'].errors['required']
+                  "
+                >
+                  <span class="err"> name is required ! </span>
+                </div>
+                <div *ngIf="formControl['observation'].errors['minlength']">
+                  <span class="err">
+                    Observation should be more than 2 character and less than
+                    150 characters!
+                  </span>
+                </div>
+                <div *ngIf="formControl['observation'].errors['maxlength']">
+                  <span class="err">
+                    Observation should be more than 2 character and less than
+                    150 characters!
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group row">
+          <div class="col-sm-3 col-form-label">
+            <label for="company"> Employee </label>
+          </div>
+          <br />
+          <div class="col-sm-9">
+            <select class="form-control" (change)="onChange($event)">
+              <option
+                *ngFor="let employee of employees"
+                id="company"
+                value="{{ employee.id }}"
+              >
+                {{ employee.firstName }} {{ employee.lastName }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary" rippleEffect>Accept</button>
+    </div>
+  </form>
+</ng-template>
+
+<!-----------   Modal Danger   ----------->
+
+<div class="modal-danger d-inline-block">
+  <ng-template #modalDanger let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title" id="myModalLabel160">Confirm</h5>
+
+      <button
+        type="button"
+        class="close"
+        (click)="modal.dismiss('Cross click')"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+      Are you sure you want to delete the visit ?
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-danger"
+        (click)="modal.close('Accept click')"
+        rippleEffect
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-danger"
+        (click)="deleteVisit()"
+        rippleEffect
+      >
+        Delete
+      </button>
+    </div>
+  </ng-template>
+</div>
+<swal></swal>

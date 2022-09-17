@@ -1,0 +1,137 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <section id="basic-carousel">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title text-primary">Company entity</h4>
+            </div>
+            <div class="card-body">
+              <form class="form form-horizontal">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="form-group row">
+                      <div class="col-sm-3 col-form-label">
+                        <label for="first-name">Name</label>
+                      </div>
+                      <div class="col-sm-9">
+                        <input
+                          type="text"
+                          formControlName="name"
+                          id="skill-name"
+                          class="form-control"
+                          name="avail-name"
+                          placeholder="Name"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-group row">
+                      <div class="col-sm-3 col-form-label">
+                        <label for="company">Company</label>
+                      </div>
+                      <div class="col-sm-9">
+                        <select
+                          class="form-control"
+                          (change)="onChange($event)"
+                        >
+                          <option
+                            *ngFor="let company of companies"
+                            id="comp"
+                            value="{{ company.id }}"
+                          >
+                            {{ company.name }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-9 offset-sm-3">
+                    <button
+                      type="submit"
+                      rippleEffect
+                      class="btn btn-primary mr-1"
+                    >
+                      Add
+                    </button>
+                    <button
+                      type="reset"
+                      rippleEffect
+                      class="btn btn-outline-secondary"
+                    >
+                      Reset
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="row" id="table-hover-animation">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title text-primary">All Avalibilties</h4>
+            <div
+              class="d-flex align-items-center justify-content-end pr-1 pb-1 pl-1 pl-md-0 pb-md-0"
+            >
+              <input
+                type="search"
+                placeholder="Search"
+                class="form-control ml-25"
+              />
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table" style="text-align: center">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name of entity</th>
+                  <th>Company</th>
+                  <th>Options</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let obj of data; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>
+                    <span class="font-weight-bold">{{ obj.name }}</span>
+                  </td>
+                  <td>{{ obj.description }}</td>
+                  <td class="overflow-hidden">
+                    <div ngbDropdown container="body">
+                      <button
+                        type="button"
+                        class="btn btn-sm hide-arrow"
+                        ngbDropdownToggle
+                        data-toggle="dropdown"
+                      >
+                        <i data-feather="more-horizontal"></i>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <a ngbDropdownItem href="javascript:void(0);">
+                          <i data-feather="edit-2" class="mr-50"></i
+                          ><span>Edit</span>
+                        </a>
+                        <a ngbDropdownItem (click)="deleteData(obj.id)">
+                          <i data-feather="trash" class="mr-50"></i>
+                          <span>Delete</span>
+                        </a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

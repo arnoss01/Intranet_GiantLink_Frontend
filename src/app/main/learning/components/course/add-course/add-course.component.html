@@ -1,0 +1,71 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+    <div class="row ">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title text-primary">Add Course</h4>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form form-horizontal">
+              <div class="row">
+
+                <div class="col-12">
+                  <div class="form-group row">
+                    <div class="col-sm-1 mr-3 col-form-label">
+                      <label for="title">Title</label>
+                    </div>
+                  <div class="col-sm-10">
+                      <input type="text" formControlName="title" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f['title'].errors }"
+                        placeholder="Enter title" />
+                      <div *ngIf="submitted && f['title'].errors" class="invalid-feedback">
+                        <div *ngIf="f['title'].errors['required']">Title is required</div>
+                        <div *ngIf="f['title'].errors['pattern']">
+                         Title must have characters only
+                        </div>
+                        <div *ngIf="f['title'].errors['minlength']">Add more characters</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                      
+                     <div class="col-12">
+                        <div class="form-group row">
+                          <div class="col-sm-1 mr-3 col-form-label">
+                            <label for="content">Content</label>
+                          </div>
+                        <div class="col-sm-10">
+                      <textarea placeholder="Enter a content" name="content" rows="2" wrap="soft"
+                        formControlName="content" [ngClass]="{ 'is-invalid': submitted && f['content'].errors }"
+                        class="form-control " data-v-aa799a9e=""></textarea>
+                      <div *ngIf="submitted && f['content'].errors" class="invalid-feedback">
+                        <div *ngIf="f['content'].errors['required']">Content is required</div>
+                        <div *ngIf="f['content'].errors['minlength']">
+                          Content should be between 10 to 255 characters
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-12">
+                  <div class="d-flex justify-content-end">
+                    <button type="reset" rippleEffect class="mr-1 btn btn-outline-secondary">Reset</button>
+                   
+                    <button type="submit" class="btn btn-primary"
+                    rippleEffect>Save</button>
+                  <!-- Swal of Sweet Alert With Position center -->
+                  <swal></swal>
+                  <!--/ Swal of Sweet Alert With Position center -->
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

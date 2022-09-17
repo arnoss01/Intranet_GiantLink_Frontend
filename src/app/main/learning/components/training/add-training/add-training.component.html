@@ -1,0 +1,116 @@
+<div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+        <app-content-header [contentHeader]="contentHeader"></app-content-header>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title text-primary">Add Training</h4>
+                        <img src="assets/images/illustration/personalization.svg" style="height: 350px; width: 250px;">
+                    </div>
+                    <div class="card-body">
+                        <form
+                                [formGroup]="form"
+                                (ngSubmit)="onSubmit()"
+                                class="form form-horizontal"
+                        >
+                    <div class="container">
+                        <div class="">
+                                <div class="">
+                                    <div class="row">
+                                        <div class="col-sm-2 col-form-label">
+                                            <label for="name">Name</label>
+                                        </div>
+                                        <div class="col-sm-5">
+                                            <div class="form-group">
+                                                <input
+                                                        type="name"
+                                                        id="name"
+                                                        class="form-control"
+                                                           name="name"
+                                                        formControlName="name"
+                                                        placeholder="name"
+                                                        [ngClass]="{
+                            'is-invalid':
+                              submitted && formControl['name'].errors
+                          }"
+                                                />
+                                                <div
+                                                        *ngIf="formControl['name'].errors"
+                                                        class="required-feedback"
+                                                >
+                                                    <div
+                                                            *ngIf="formControl['name'].errors['required']"
+                                                            class="required-feedback"
+                                                    >
+                                                        Name is required
+                                                    </div>
+                                                    <div *ngIf="formControl['name'].errors['pattern']">
+                                                        Name must have characters only
+                                                    </div>
+                                                    <div *ngIf="formControl['name'].errors['minlength']">
+                                                        Add more characters
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="">
+                                    <div class="form-group row justify-content-start">
+                                        <div class="col-sm-2 col-form-label">
+                                            <label for="description">Description</label>
+                                        </div>
+                                        <div class="col-10">
+                      <textarea
+                              id="description"
+                              placeholder="description"
+                              name="c-rp-cs"
+                              rows="2"
+                              wrap="soft"
+                              class="form-control"
+                              formControlName="description"
+                              [ngClass]="{
+                          'is-invalid':
+                            submitted && formControl['description'].errors
+                        }"
+                      ></textarea>
+                                            <div
+                                                    *ngIf="formControl['description'].errors"
+                                                    class="required-feedback"
+                                            >
+                                                <div *ngIf="formControl['description'].errors['description']">
+                                                    description is required
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="col-sm-12">
+                                    <div class="d-flex justify-content-end mb-2">
+                                        <button
+                                                type="reset"
+                                                rippleEffect
+                                                class="mr-1 btn btn-outline-secondary"
+                                        >
+                                            Reset
+                                        </button>
+
+                                        <button type="submit" class="btn btn-primary" rippleEffect>
+                                            Save
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
